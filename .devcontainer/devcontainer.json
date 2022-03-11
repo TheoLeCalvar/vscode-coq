@@ -1,0 +1,34 @@
+{
+	"name": "Coq",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			// [Choice] Coq version use: latest, 8.15, 8.14, 8.12, 8.11
+			"VARIANT": "8.15.0",
+			// [Option] Install zsh
+			"INSTALL_ZSH": "true",
+			// [Option] Upgrade OS packages to their latest versions
+			"UPGRADE_PACKAGES": "false"
+		}
+	},
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"coqtop.binPath": "/home/coq/.opam/4.05.0/bin/"
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	// For example, if you want to use vscode-jupyter, add "ms-toolsai.jupyter".
+	"extensions": [
+		"maximedenes.vscoq"
+	],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "R --version",
+
+	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "coq"
+}
