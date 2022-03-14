@@ -19,10 +19,13 @@
 
 **[Optional] Include any special setup requirements here. For example:**
 
-While the definition itself works unmodified, you can select the version of Coq the container uses by updating the `VARIANT` arg in the included `.devcontainer/devcontainer.json` file. Find available versions [here](https://hub.docker.com/r/coqorg/coq).
+While the definition itself works unmodified, you can select the base version of debian to use by updating the `VARIANT` arg in the included `.devcontainer/devcontainer.json` file. You can also control the version of Coq to install with the `COQ_VERSION` arg.
 
 ```json
-"args": { "VARIANT": "8.15.0" }
+"args": { 
+   "VARIANT": "bullseye",
+   "COQ_VERSION": "8.15"
+}
 ```
 
 ### Adding the definition to a project or codespace

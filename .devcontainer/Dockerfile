@@ -1,27 +1,25 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.224.2/containers/debian/.devcontainer/base.Dockerfile
 
-# [Choice] Coq version use: latest, 8.15, 8.14, 8.12, 8.11
-ARG VARIANT="latest"
-FROM coqorg/coq:${VARIANT}
+# [Choice] Debian version (use bullseye on local arm64/Apple Silicon): bullseye, buster
+ARG VARIANT="buster"
+FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
 
-# [Option] Install zsh
-ARG INSTALL_ZSH="true"
-# [Option] Upgrade OS packages to their latest versions
-ARG UPGRADE_PACKAGES="false"
-
-# Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
-ARG USERNAME=coq
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-USER root
-COPY library-scripts/*.sh /tmp/library-scripts/
-RUN apt update && export DEBIAN_FRONTEND=noninteractive \
-    && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true" \
-    && apt install -y --no-install-recommends openjdk-11-jre-headless \
+# ** [Optional] Uncomment this section to install additional packages. **
+ARG OPAM_VERSION="2.1.2"
+ARG OPAM_ARCH="x86_64"
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends build-essential wget libgmp-dev \
     && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
+    && rm -rf /var/lib/apt/lists/* \
+    && wget -O /usr/local/bin/opam https://github.com/ocaml/opam/releases/download/${OPAM_VERSION}/opam-${OPAM_VERSION}-${OPAM_ARCH}-linux \
+    && chmod +x /usr/local/bin/opam
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update \
-#     && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
+
+USER vscode
+
+# [Choice] Coq version use: 8.15.0, 8.14.0, 8.12.0, 8.11.0
+ARG COQ_VERSION="8.15.0"
+RUN opam init -y -a --disable-sandboxing \
+    && eval $(opam env --switch=default) \
+    && opam pin -y add coq ${COQ_VERSION} \
+    && opam clean

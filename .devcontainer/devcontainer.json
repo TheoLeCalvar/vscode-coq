@@ -3,18 +3,16 @@
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
-			// [Choice] Coq version use: latest, 8.15, 8.14, 8.12, 8.11
-			"VARIANT": "8.15.0",
-			// [Option] Install zsh
-			"INSTALL_ZSH": "true",
-			// [Option] Upgrade OS packages to their latest versions
-			"UPGRADE_PACKAGES": "false"
+			// [Choice] Debian version (use bullseye on local arm64/Apple Silicon): bullseye, buster
+			"VARIANT": "bullseye",
+			// [Choice] Coq version use: 8.15.0, 8.14.0, 8.12.0, 8.11.0
+			"COQ_VERSION": "8.15.0"
 		}
 	},
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
-		"coqtop.binPath": "/home/coq/.opam/4.05.0/bin/"
+		"coqtop.binPath": "/home/vscode/.opam/default/bin/"
 	},
 
 	// Add the IDs of extensions you want installed when the container is created.
@@ -30,5 +28,5 @@
 	// "postCreateCommand": "R --version",
 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "coq"
+	"remoteUser": "vscode"
 }
